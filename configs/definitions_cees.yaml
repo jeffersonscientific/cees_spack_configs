@@ -1,0 +1,32 @@
+  definitions:
+  - compilers_core: [gcc@4.8.5]
+  - compilers_gcc: [gcc@11.2.0]
+  - compilers_intel: [intel@2021.4.0, oneapi@2021.4.0]
+  - compilers_intel19: [intel@19.0.0.117]
+  
+  #
+  #
+  - mpis_gcc: [mpich, openmpi]
+  - mpis_intel: [intel-oneapi-mpi, mpich]
+  - packages_compilers: [gcc, intel-oneapi-compilers]
+  
+  #
+  #
+  - packages_serial: [proj, swig, geos, maven, intel-oneapi-tbb, intel-oneapi-mkl,
+      libdwarf, tar, cuda, numactl]
+  - packages_serial_gcc: [$packages_serial, ncurses, ucx, font-util]
+  - packages_serial_intel: [$packages_serial]
+  
+  #
+  # NOTE: Not sure we need nasm@2.14.02. Looks likd .15 gets installed (anyway, as a dependency?)
+  #- packages_serial_intel19: [proj, swig, geos, maven, intel-oneapi-tbb, intel-oneapi-mkl,
+  #    sintel-tbb, ncurses, libdwarf@20160507, libsigsegv@2.12, tar@1.32]
+  #
+  - packages_mpi: [hdf5, netcdf-c, netcdf-fortran, netcdf-cxx4, cdo, parallel-netcdf,
+      petsc, fftw, parallelio, cgal]
+  - packages_mpi_gcc:
+    - $packages_mpi
+    - paraview
+  - packages_mpi_intel:
+    - $packages_mpi
+  #

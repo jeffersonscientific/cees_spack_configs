@@ -1,0 +1,29 @@
+  packages:
+    mpich:
+      variants: +slurm
+    slurm:
+      version: [21.08.4]
+      externals:
+      - spec: slurm@21.08.4
+        prefix: /usr
+    hdf5:
+      version: [1.10.7]
+      variants: +mpi
+    petsc:
+      variants: +mpi +openmp +batch +fftw
+    curl:
+      version: [7.80.0, 7.79.0]
+    intel-oneapi-compilers:
+      version: [2021.4.0]
+      compiler: [gcc@4.8.5]
+      target: [x86_64]
+    libgcrypt:
+      version: [1.9.2]
+    libtool:
+      version: [2.4.6]
+    all:
+      compiler: [intel@2021.4.0]
+      target: [zen2]
+      providers:
+        mpi: [mpich]
+
