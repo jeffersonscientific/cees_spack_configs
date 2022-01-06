@@ -1,4 +1,23 @@
   packages:
+    gcc:
+      version: [11.2.0]
+      compiler: [gcc@4.8.5]
+      target: [x86_64_v3]
+      buildable: true
+      externals:
+      - spec: gcc@9.1.0
+        modules: [devel, gcc/9.1.0]
+        buildable: false
+      - spec: gcc@8.1.0
+        modules: [devel, gcc/8.1.0]
+        buildable: false
+      - spec: gcc@7.3.0
+        modules: [devel, gcc/7.3.0]
+        buildable: false
+    intel-oneapi-compilers:
+      version: [2021.4.0]
+      compiler: [gcc@4.8.5]
+      target: [x86_64]
     slurm:
       version: [21.08.4]
       externals:
@@ -24,9 +43,6 @@
       version: [20180129]
     ncurses:
       version: [6.2]
-    petsc:
-      version: [3.16.1]
-      variants: +batch +fftw  +slurm +mpi +openmp
     mpich:
       version: [3.4.2]
       variants: +slurm
@@ -72,6 +88,8 @@
     paraview:
       version: [5.9.1]
       variants: [+hdf5 +python3]
+    petsc:
+      variants: +batch +fftw  +slurm +mpi +openmp
     muparser:
       version: [2.2.6.1]
     maven:
@@ -98,25 +116,6 @@
       version: [1.9.2]
     libtool:
       version: [2.4.6]
-    gcc:
-      version: [11.2.0]
-      compiler: [gcc@4.8.5]
-      target: [x86_64_v3]
-      buildable: true
-      externals:
-      - spec: gcc@9.1.0
-        modules: [devel, gcc/9.1.0]
-        buildable: false
-      - spec: gcc@8.1.0
-        modules: [devel, gcc/8.1.0]
-        buildable: false
-      - spec: gcc@7.3.0
-        modules: [devel, gcc/7.3.0]
-        buildable: false
-    intel-oneapi-compilers:
-      version: [2021.4.0]
-      compiler: [gcc@4.8.5]
-      target: [x86_64_v3]
     intel-oneapi-tbb:
       version: [2021.4.0]
     intel-oneapi-mkl:
@@ -134,7 +133,6 @@
     gettext:
       version: [0.21]
     all:
-      target: [zen2]
       compiler: [gcc@11.2.0, intel@2021.4.0, oneapi@2021.4.0]
       variants: build_type=Release +mpi
       providers:
