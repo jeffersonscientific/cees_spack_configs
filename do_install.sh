@@ -9,6 +9,7 @@
 #SBATCH --constraint=CPU_GEN:RME
 #SBATCH --time=36:00:00
 #
+#
 module purge
 #
 #
@@ -17,7 +18,7 @@ module purge
 # spack find
 # module unload icc ifort
 #
-module load gcc/9.
+#module load gcc/9.
 
 SPK_ENV="matrix"
 if [[ ! -z $1 ]]; then
@@ -39,9 +40,9 @@ if [[ ! $? -eq 0 ]]; then
 fi
 spack concretize --force 
 #
-if [[ ! $? -eq 0 ]]; then
-  echo "Concretization failed. Buggin' out!"
-  exit 42
-fi
+#if [[ ! $? -eq 0 ]]; then
+#  echo "Concretization failed. Buggin' out!"
+#  exit 42
+#fi
 #
 spack install -y $2

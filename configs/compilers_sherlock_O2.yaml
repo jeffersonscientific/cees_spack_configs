@@ -1,4 +1,4 @@
-  compilers::
+  compilers:
   - compiler:
       spec: gcc@4.8.5
       paths:
@@ -55,9 +55,9 @@
         cpp: /share/software/user/open/gcc/9.1.0/bin/cpp
       environment: {}
       flags:
-        cflags: -O2 -we147 -fPIC
-        cxxflags: -O2 -we147 -fPIC
-        fflags: -O2 -fallow-argument-mismatch -we147 -fPIC
+        cflags: -O2 -fPIC
+        cxxflags: -O2 -fPIC
+        fflags: -O2 -fallow-argument-mismatch -fPIC
       operating_system: centos7
       target: x86_64
       modules: [devel, gcc/9.1.0]
@@ -86,9 +86,9 @@
         f77: /home/groups/s-ees/share/cees/spack_compilers/spack/opt/spack/linux-centos7-x86_64_v3/gcc-4.8.5/gcc-11.2.0-pjl2s6u6mujagujmbvb2chncwdrgeec6/bin/gfortran
         fc: /home/groups/s-ees/share/cees/spack_compilers/spack/opt/spack/linux-centos7-x86_64_v3/gcc-4.8.5/gcc-11.2.0-pjl2s6u6mujagujmbvb2chncwdrgeec6/bin/gfortran
       flags:
-        cflags: -O2 -mrdrnd -we147 -fPIC
-        cxxflags: -O2 -we147 -fPIC
-        fflags: -O2 -fallow-argument-mismatch -we147 -fPIC
+        cflags: -O2 -mrdrnd -fPIC
+        cxxflags: -O2 -fPIC
+        fflags: -O2 -fallow-argument-mismatch -fPIC
       operating_system: centos7
       target: x86_64
       modules: []
