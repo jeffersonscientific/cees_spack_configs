@@ -1,10 +1,12 @@
   packages:
     gcc:
       version: [11.2.0]
-      compiler: [gcc@4.8.5]
-      target: [x86_64_v3]
-      buildable: true
+      compiler: [gcc@9.1.0]
+      target: [x86_64]
       externals:
+      - spec: gcc@11.2.0
+        prefix: /home/groups/s-ees/share/cees/spack_compilers/spack/opt/spack/linux-centos7-x86_64/gcc-9.1.0/gcc-11.2.0-kjhojkbjplqdocfx2ngybnqicjxhfzhm
+        modules: []
       - spec: gcc@9.1.0
         modules: [devel, gcc/9.1.0]
         buildable: false
@@ -16,13 +18,19 @@
         buildable: false
     intel-oneapi-compilers:
       version: [2021.4.0]
-      compiler: [gcc@4.8.5]
+      compiler: [gcc@9.1.0]
       target: [x86_64]
+      externals:
+      - spec: intel-oneapi-compilers@2021.4.0
+        prefix: /home/groups/s-ees/share/cees/spack_compilers/spack/opt/spack/linux-centos7-zen2/gcc-9.1.0/intel-oneapi-compilers-2021.4.0-56emuishvgppatt46d2xynaeliu4fhmc
+        modules: [develop, gcc/9.1.0]
     slurm:
       version: [21.08.4]
       externals:
       - spec: slurm@21.08.4
         prefix: /usr
+    curl:
+      version: [7.80.0]
     numactl:
       version: [2.0.14]
     perl:
@@ -71,8 +79,8 @@
     fftw:
       version: [3.3.9]
     hdf5:
-      variants: ~cxx~debug+fortran+hl~java+mpi+shared~szip+threadsafe
-      version: [1.10.7, 1.12.0]
+      variants: ~debug+fortran+hl~java+mpi+shared~szip+threadsafe
+      version: [1.10.7]
     netcdf-c:
       version: [4.8.1]
     netcdf-cxx4:

@@ -8,13 +8,13 @@
   - mpis_intel: [intel-oneapi-mpi, mpich]
   - packages_compilers: [gcc, intel-oneapi-compilers]
   #
-  - packages_serial: [proj, swig, geos, maven, intel-oneapi-tbb, intel-oneapi-mkl,
+  - packages_serial: [proj, swig, geos, maven, intel-oneapi-tbb,
       libdwarf, tar, cuda, numactl]
   - packages_serial_gcc: [$packages_serial, ncurses, ucx, font-util]
   - packages_serial_intel: [$packages_serial]
   #
   - packages_mpi: [hdf5, netcdf-c, netcdf-fortran, netcdf-cxx4, cdo, parallel-netcdf,
-      petsc, fftw, parallelio, cgal]
+      petsc, fftw, parallelio, cgal, intel-oneapi-mkl]
   - packages_mpi_gcc:
     - $packages_mpi
     - paraview
