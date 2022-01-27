@@ -76,8 +76,8 @@
         fc: /home/groups/s-ees/share/cees/spack_compilers/spack/opt/spack/linux-centos7-zen2/gcc-9.1.0/intel-oneapi-compilers-2021.4.0-56emuishvgppatt46d2xynaeliu4fhmc/compiler/2021.4.0/linux/bin/intel64/ifort
         f90: /home/groups/s-ees/share/cees/spack_compilers/spack/opt/spack/linux-centos7-zen2/gcc-9.1.0/intel-oneapi-compilers-2021.4.0-56emuishvgppatt46d2xynaeliu4fhmc/compiler/2021.4.0/linux/bin/intel64/ifort
       flags:
-        cflags: -O2 -we147 -fPIC
-        cxxflags: -O2 -we147 -fPIC
+        cflags: -O2 -fPIC -we147
+        cxxflags: -O2 -fPIC -we147
         fflags: -O2 -fPIC
       operating_system: centos7
       target: x86_64

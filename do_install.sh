@@ -45,4 +45,4 @@ spack concretize --force
 #  exit 42
 #fi
 #
-spack install -y $2
+spack install -j $SLURM_CPUS_PER_TASK -y $2
