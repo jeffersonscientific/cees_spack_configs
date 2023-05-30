@@ -1,0 +1,339 @@
+# This is a Spack Environment file.
+spack:
+  definitions:
+  - compilers_core: [gcc@9.1.0]
+  - compilers_gcc: [gcc@12.1.0]
+  - compilers_intel: [intel@=2021.9.0]
+#  - compilers_intel: [intel@2019]
+#  - compilers_oneapi: [oneapi@2021.4.0]
+#  
+#  - packages_core: [intel-oneapi-compilers]
+  #
+  - mpis: [mpich]
+  - packages_mpis: [mpich]
+    #
+  - packages_serial: [ intel-oneapi-tbb, intel-oneapi-mkl, nco, libszip, udunits, antlr]
+  - packages_parallel: [netcdf-c, netcdf-fortran, netcdf-cxx4, parallel-netcdf]
+ 
+  specs:
+  # compilers:
+  # Do we need this, or can we just check the "build compilers if we need them" box?
+#  - matrix:
+#    - [$compilers_intel]
+#    - [$%compilers_core]
+  #
+  - intel-oneapi-compilers %gcc@10.1.0
+  # build serial packages and MPI(s)
+  - matrix:
+    - [$packages_serial, $packages_mpis]
+    - [$%compilers_intel]
+  #
+  # Parallel (MPI) packages:
+  - matrix:
+    - [$packages_parallel]
+    - [$^mpis]
+    - [$%compilers_intel]
+  #
+  view: true
+  concretizer:
+    unify: when_possible
+  packages:
+    cuda:
+      version: [12.0.0]
+      externals:
+      - spec: cuda@12.0.0
+        prefix: /share/software/user/open/cuda/12.0.0
+        modules: [cuda/12.0.0]
+    dune:
+      variants: +functions +parmetis +petsc
+    diffutils:
+      version: [3.6]
+    suite-sparse:
+      variants: +openmp ~cuda
+      providers:
+        cuda: [cuda@12.0.0]
+    scotch:
+      variants: +metis
+    gmsh:
+      variants: +mpi +hdf5 ~fltk
+    libxsmm:
+      variants: +shared+generator
+    hdf5:
+      variants: ~cxx~debug+fortran+hl~java+mpi+shared~szip+threadsafe
+    netcdf-c:
+      variants: +mpi
+    boost:
+      variants: +atomic +container +exception +math +random +regex +system +test +timer
+    lua:
+      version: [5.3.4, 5.1.4]
+      externals:
+      - spec: lua@5.1.4
+        prefix: /usr
+      - spec: lua@5.3.4
+        prefix: /share/software/user/open/lua/5.3.4
+        modules: [system, devel, lua/5.3.4]
+    cmake:
+      version: [3.24.2]
+      externals:
+      - spec: cmake@3.24.2
+        prefix: /share/software/user/open/cmake/3.24.2
+        modules: [system, curl/7.81.0, cmake/3.24.2]
+    cdo:
+      variants: ~szip
+    curl:
+      version: [7.81.0]
+      externals:
+      - spec: cmake@7.81.0
+        prefix: /share/software/user/open/curl/7.81.0
+        modules: [system, curl/7.81.0]
+    doxygen:
+      variants: +graphviz
+    petsc:
+      variants: +batch +hdf5 +fftw +hwloc +hypre
+    libszip:
+      externals:
+      - spec: libszip@2.1.1
+        prefix: /share/software/user/open/szip/2.1.1
+        modules: [system, szip/2.1.1]
+    tar:
+      version: [1.26]
+      externals:
+      - spec: tar@1.26
+        prefix: /usr
+    metis:
+      variants: +optimizations+int64+real64
+    nco:
+      version: [4.9.3]
+    parmetis:
+      variants: +int64+real64
+    pumi:
+      variants: +fortran +int64 +ipo +shared ~zoltan
+    gcc:
+      version: [12.1.0]
+      compiler: [gcc@4.8.5]
+      target: [x86_64]
+      externals:
+      - spec: gcc@12.1.0
+        prefix: /share/software/user/open/gcc/12.1.0
+        modules: [devel, gcc/12.1.0, binutils]
+        compiler: [gcc@4.8.5]
+        buildable: false
+      - spec: gcc@10.1.0
+        prefix: /share/software/user/open/gcc/10.1.0
+        modules: [devel, gcc/10.1.0, binutils/]
+        buildable: false
+        compiler: [gcc@4.8.5]
+    intel-oneapi-compilers:
+      compiler: [gcc@10.1.0]
+      target: [x86_64_v3]
+      version: [2023.1.0]
+      externals:
+      - spec: intel-oneapi-compilers@2023.1.0 %gcc@10.1.0
+        prefix: /scratch/users/myoder96/spack_dev/spack/opt/spack/linux-centos7-x86_64_v3/gcc-9.1.0/intel-oneapi-compilers-2022.2.0-cz55wu6ueymbpsyyl2ntrkgqjtgqh5s6
+
+    all:
+      compiler: [intel@2021.9.0]
+      target: [x86_64]
+      variants: build_type=Release +mpi
+      providers:
+        mpi: [mpich]
+        lapack: [intel-oneapi-mkl]
+        blas: [intel-oneapi-mkl]
+      permissions:
+        read: world
+        write: user
+  modules:
+    default:
+      roots:
+        lmod: $spack/share/spack/lmod_tstorms_intel
+        tcl: $spack/share/spack/modules_tstorms_intel
+      enable:
+      - lmod
+      lmod:
+        core_compilers:
+        - gcc@4.8.5
+        - gcc@10.1.0
+        hierarchy:
+        - mpi
+        - compiler
+        'hash_length:': 5
+        projections:
+          all: '{name}-tstorms/{version}'
+          ^mpi: '{name}-tstorms/{^mpi.name}-{version}'
+        all:
+          environment:
+            set:
+              '{name}_ROOT': '{prefix}'
+        mpi:
+          environment:
+            set:
+              'MPI_ROOT': '{prefix}'
+    prefix_inspections:
+      bin:
+      - PATH
+      lib:
+      - LIBRARY_PATH
+      - LD_LIBRARY_PATH
+      - '{name}_LIB'
+      lib64:
+      - LIBRARY_PATH
+      - LD_LIBRARY_PATH
+      - '{name}_LIB64'
+      lib/pkgconfig:
+      - PKG_CONFIG_PATH
+      share/pkgconfig:
+      - PKG_CONFIG_PATH
+      include:
+      - CPATH
+      - '{name}_INC'
+  #
+  # config:module_roots has been replaced by modules:[module set]:roots
+  config:
+    install_missing_compilers: true
+    checksum: true
+    deprecated: false
+    dirty: false
+    ccache: false
+    concretizer: clingo
+    shared_linking: rpath
+    build_stage:
+    - /scratch/${user}/spack_stage
+    - $tempdir/${user}/spack-stage
+    - ~/.spack/stage
+#
+  compilers:
+  - compiler:
+      spec: gcc@4.8.5
+      paths:
+        cc: /usr/bin/gcc
+        cxx: /usr/bin/g++
+        f77: /usr/bin/gfortran
+        fc: /usr/bin/gfortran
+      operating_system: centos7
+      target: x86_64
+      flags:
+        cflags: -fPIC
+        cxxflags: -fPIC
+      modules: []
+      environment: {}
+      extra_rpaths: []
+  - compiler:
+      spec: gcc@9.1.0
+      paths:
+        cc: /share/software/user/open/gcc/9.1.0/bin/gcc
+        cxx: /share/software/user/open/gcc/9.1.0/bin/g++
+        f77: /share/software/user/open/gcc/9.1.0/bin/gfortran
+        fc: /share/software/user/open/gcc/9.1.0/bin/gfortran
+      flags:
+        cflags: -fPIC
+        cxxflags: -fPIC
+        fflags: -fPIC -fallow-argument-mismatch
+      operating_system: centos7
+      target: x86_64
+      modules: [devel, gcc/9.1.0, binutils/2.38]
+      environment: {}
+      extra_rpaths: []
+  - compiler:
+      spec: gcc@10.1.0
+      paths:
+        cc: /share/software/user/open/gcc/10.1.0/bin/gcc
+        cxx: /share/software/user/open/gcc/10.1.0/bin/g++
+        f77: /share/software/user/open/gcc/10.1.0/bin/gfortran
+        fc: /share/software/user/open/gcc/10.1.0/bin/gfortran
+      flags:
+        cflags: -fPIC
+        cxxflags: -fPIC
+        fflags: -fPIC -fallow-argument-mismatch
+      operating_system: centos7
+      target: x86_64
+      modules: [devel, gcc/10.1.0, binutils/2.38]
+      environment: {}
+      extra_rpaths: []
+  - compiler:
+      spec: gcc@12.1.0
+      paths:
+        cc: /share/software/user/open/gcc/12.1.0/bin/gcc
+        cxx: /share/software/user/open/gcc/12.1.0/bin/g++
+        f77: /share/software/user/open/gcc/12.1.0/bin/gfortran
+        fc: /share/software/user/open/gcc/12.1.0/bin/gfortran
+      modules: [devel, gcc/12.1.0, binutils/2.38]
+      flags:
+        cflags: -fPIC
+        cxxflags: -fPIC
+        fflags: -fPIC -fallow-argument-mismatch
+      operating_system: centos7
+      target: x86_64
+      environment: {}
+      extra_rpaths: []
+  - compiler:
+      spec: dpcpp@2022.2.0
+      paths:
+        cc: /scratch/users/myoder96/spack_dev/spack/opt/spack/linux-centos7-x86_64_v3/gcc-9.1.0/intel-oneapi-compilers-2022.2.0-cz55wu6ueymbpsyyl2ntrkgqjtgqh5s6/compiler/2022.2.0/linux/bin/icx
+        cxx: /scratch/users/myoder96/spack_dev/spack/opt/spack/linux-centos7-x86_64_v3/gcc-9.1.0/intel-oneapi-compilers-2022.2.0-cz55wu6ueymbpsyyl2ntrkgqjtgqh5s6/compiler/2022.2.0/linux/bin/dpcpp
+        f77: /scratch/users/myoder96/spack_dev/spack/opt/spack/linux-centos7-x86_64_v3/gcc-9.1.0/intel-oneapi-compilers-2022.2.0-cz55wu6ueymbpsyyl2ntrkgqjtgqh5s6/compiler/2022.2.0/linux/bin/ifx
+        fc: /scratch/users/myoder96/spack_dev/spack/opt/spack/linux-centos7-x86_64_v3/gcc-9.1.0/intel-oneapi-compilers-2022.2.0-cz55wu6ueymbpsyyl2ntrkgqjtgqh5s6/compiler/2022.2.0/linux/bin/ifx
+      flags: {}
+      operating_system: centos7
+      target: x86_64
+      modules: []
+      environment: {}
+      extra_rpaths: []
+  - compiler:
+      spec: intel@2019
+      paths:
+        cc: /share/software/user/restricted/icc/2019/bin/icc
+        cxx: /share/software/user/restricted/icc/2019/bin/icpc
+        f77: /share/software/user/restricted/ifort/2019/bin/ifort
+        fc: /share/software/user/restricted/ifort/2019/bin/ifort
+      flags:
+        cflags: -fPIC -we147 -diag-disable=10441 
+        cxxflags: -fPIC -diag-disable=10441
+        fflags: -fPIC -diag-disable=10441
+      operating_system: centos7
+      target: x86_64
+      modules: [devel, icc/2019, ifort/2019]
+      environment: {}
+      extra_rpaths: []
+  - compiler:
+      spec: gcc@=13.1.0
+      paths:
+        cc: /scratch/users/myoder96/spack_dev/spack/var/spack/environments/compilers/.spack-env/view/bin/gcc
+        cxx: /scratch/users/myoder96/spack_dev/spack/var/spack/environments/compilers/.spack-env/view/bin/g++
+        f77: /scratch/users/myoder96/spack_dev/spack/var/spack/environments/compilers/.spack-env/view/bin/gfortran
+        fc: /scratch/users/myoder96/spack_dev/spack/var/spack/environments/compilers/.spack-env/view/bin/gfortran
+      flags: {}
+      operating_system: centos7
+      target: x86_64
+      modules: []
+      environment: {}
+      extra_rpaths: []
+  - compiler:
+      spec: intel@=2021.9.0
+      paths:
+        cc: /scratch/users/myoder96/spack_dev/spack/opt/spack/linux-centos7-x86_64_v3/gcc-10.1.0/intel-oneapi-compilers-2023.1.0-z4d3b3vzijr57hnys7vwyii4zg3cdalv/compiler/2023.1.0/linux/bin/intel64/icc
+        cxx: /scratch/users/myoder96/spack_dev/spack/opt/spack/linux-centos7-x86_64_v3/gcc-10.1.0/intel-oneapi-compilers-2023.1.0-z4d3b3vzijr57hnys7vwyii4zg3cdalv/compiler/2023.1.0/linux/bin/intel64/icpc
+        f77: /scratch/users/myoder96/spack_dev/spack/opt/spack/linux-centos7-x86_64_v3/gcc-10.1.0/intel-oneapi-compilers-2023.1.0-z4d3b3vzijr57hnys7vwyii4zg3cdalv/compiler/2023.1.0/linux/bin/intel64/ifort
+        fc: /scratch/users/myoder96/spack_dev/spack/opt/spack/linux-centos7-x86_64_v3/gcc-10.1.0/intel-oneapi-compilers-2023.1.0-z4d3b3vzijr57hnys7vwyii4zg3cdalv/compiler/2023.1.0/linux/bin/intel64/ifort
+      flags:
+        cflags: -fPIC -we147
+        cxxflags: -fPIC 
+        fflags: -fPIC -diag-disable=10441
+      operating_system: centos7
+      target: x86_64
+      modules: [devel, gcc/10.1.0]
+      environment: {}
+      extra_rpaths: []
+  - compiler:
+      spec: oneapi@=2023.1.0
+      paths:
+        cc: /scratch/users/myoder96/spack_dev/spack/opt/spack/linux-centos7-x86_64_v3/gcc-10.1.0/intel-oneapi-compilers-2023.1.0-z4d3b3vzijr57hnys7vwyii4zg3cdalv/compiler/2023.1.0/linux/bin/icx
+        cxx: /scratch/users/myoder96/spack_dev/spack/opt/spack/linux-centos7-x86_64_v3/gcc-10.1.0/intel-oneapi-compilers-2023.1.0-z4d3b3vzijr57hnys7vwyii4zg3cdalv/compiler/2023.1.0/linux/bin/icpx
+        f77: /scratch/users/myoder96/spack_dev/spack/opt/spack/linux-centos7-x86_64_v3/gcc-10.1.0/intel-oneapi-compilers-2023.1.0-z4d3b3vzijr57hnys7vwyii4zg3cdalv/compiler/2023.1.0/linux/bin/ifx
+        fc: /scratch/users/myoder96/spack_dev/spack/opt/spack/linux-centos7-x86_64_v3/gcc-10.1.0/intel-oneapi-compilers-2023.1.0-z4d3b3vzijr57hnys7vwyii4zg3cdalv/compiler/2023.1.0/linux/bin/ifx
+      flags: {}
+      operating_system: centos7
+      target: x86_64
+      modules: []
+      environment: {}
+      extra_rpaths: []
+       
