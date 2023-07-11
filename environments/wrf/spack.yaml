@@ -1,0 +1,154 @@
+spack:
+  specs:
+  - gcc
+  - wrf-io
+  - wps
+  - nco
+  - ncl
+  packages:
+    wrf:
+      variants: build_type=dm+sm compile_type=em_real nesting=basic ~pnetcdf
+    wps:
+      variants: build_type=dmpar
+    wrf-io:
+      variants: +openmp
+    hdf5:
+      variants: ~cxx~debug+fortran+hl~java+mpi+shared~szip+threadsafe
+    gcc:
+      version: [13.1.0]
+      compiler: [gcc@4.8.5]
+      target: [x86_64]
+    all:
+      compiler: [gcc@13.1.0]
+      target: [x86_64]
+      variants: build_type=Release +mpi
+      providers:
+        mpi: [mpich]
+        lapack: [netlib-lapack]
+        blas: [netlib-lapack]
+      permissions:
+        read: world
+        write: user
+  view: true
+  config:
+    install_missing_compilers: true
+    checksum: true
+    deprecated: false
+    dirty: false
+    ccache: false
+    concretizer: clingo
+    shared_linking:
+      type: rpath
+      bind: false
+  modules:
+    default:
+      roots:
+        lmod: $spack/share/spack/lmod_wrf
+        tcl: $spack/share/spack/modules_wrf
+      'enable:':
+      - lmod
+      lmod:
+        core_compilers:
+        - gcc@4.8.5
+        - gcc@10.1.0
+        hierarchy:
+        - mpi
+        - compiler
+        'hash_length:': 5
+        projections:
+          all: '{name}-wrf/{version}'
+          ^mpi: '{name}-wrf/{^mpi.name}-{version}'
+        all:
+          environment:
+            set:
+              '{name}_ROOT': '{prefix}'
+        mpi:
+          environment:
+            set:
+              MPI_ROOT: '{prefix}'
+    prefix_inspections:
+      bin:
+      - PATH
+      lib:
+      - LIBRARY_PATH
+      - LD_LIBRARY_PATH
+#      - '{name}_LIB'
+      lib64:
+      - LIBRARY_PATH
+      - LD_LIBRARY_PATH
+#      - '{name}_LIB64'
+      lib/pkgconfig:
+      - PKG_CONFIG_PATH
+      share/pkgconfig:
+      - PKG_CONFIG_PATH
+      include:
+      - CPATH
+#      - '{name}_INC'
+  compilers:
+  - compiler:
+      spec: clang@=3.4.2
+      paths:
+        cc: /usr/bin/clang
+        cxx: /usr/bin/clang++
+        f77: null
+        fc: null
+      flags: {}
+      operating_system: centos7
+      target: x86_64
+      modules: []
+      environment: {}
+      extra_rpaths: []
+  - compiler:
+      spec: gcc@=4.8.5
+      paths:
+        cc: /usr/bin/gcc
+        cxx: /usr/bin/g++
+        f77: /usr/bin/gfortran
+        fc: /usr/bin/gfortran
+      flags: {}
+      operating_system: centos7
+      target: x86_64
+      modules: []
+      environment: {}
+      extra_rpaths: []
+  - compiler:
+      spec: gcc@=13.1.0
+      paths:
+        cc: /home/myoder96_stanford_edu/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-13.1.0-dpzs7xmokdjr7u5oees64lljzuizipmb/bin/gcc
+        cxx: /home/myoder96_stanford_edu/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-13.1.0-dpzs7xmokdjr7u5oees64lljzuizipmb/bin/g++
+        f77: /home/myoder96_stanford_edu/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-13.1.0-dpzs7xmokdjr7u5oees64lljzuizipmb/bin/gfortran
+        fc: /home/myoder96_stanford_edu/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-13.1.0-dpzs7xmokdjr7u5oees64lljzuizipmb/bin/gfortran
+      flags: {}
+      operating_system: centos7
+      target: x86_64
+      modules: []
+      environment: {}
+      extra_rpaths: []
+  - compiler:
+      spec: dpcpp@=2023.1.0
+      paths:
+        cc: /home/myoder96_stanford_edu/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-oneapi-compilers-2023.1.0-wjwlodvj2wnyl7f3ezgzu5uvyfjld7ck/compiler/2023.1.0/linux/bin/icx
+        cxx: /home/myoder96_stanford_edu/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-oneapi-compilers-2023.1.0-wjwlodvj2wnyl7f3ezgzu5uvyfjld7ck/compiler/2023.1.0/linux/bin/dpcpp
+        f77: /home/myoder96_stanford_edu/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-oneapi-compilers-2023.1.0-wjwlodvj2wnyl7f3ezgzu5uvyfjld7ck/compiler/2023.1.0/linux/bin/ifx
+        fc: /home/myoder96_stanford_edu/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-oneapi-compilers-2023.1.0-wjwlodvj2wnyl7f3ezgzu5uvyfjld7ck/compiler/2023.1.0/linux/bin/ifx
+      flags: {}
+      operating_system: centos7
+      target: x86_64
+      modules: []
+      environment: {}
+      extra_rpaths: []
+  - compiler:
+      spec: oneapi@=2023.1.0
+      paths:
+        cc: /home/myoder96_stanford_edu/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-oneapi-compilers-2023.1.0-wjwlodvj2wnyl7f3ezgzu5uvyfjld7ck/compiler/2023.1.0/linux/bin/icx
+        cxx: /home/myoder96_stanford_edu/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-oneapi-compilers-2023.1.0-wjwlodvj2wnyl7f3ezgzu5uvyfjld7ck/compiler/2023.1.0/linux/bin/icpx
+        f77: /home/myoder96_stanford_edu/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-oneapi-compilers-2023.1.0-wjwlodvj2wnyl7f3ezgzu5uvyfjld7ck/compiler/2023.1.0/linux/bin/ifx
+        fc: /home/myoder96_stanford_edu/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-oneapi-compilers-2023.1.0-wjwlodvj2wnyl7f3ezgzu5uvyfjld7ck/compiler/2023.1.0/linux/bin/ifx
+      flags: {}
+      operating_system: centos7
+      target: x86_64
+      modules: []
+      environment: {}
+      extra_rpaths: []
+  repos:
+  - /home/myoder96_stanford_edu/WRF/spack_repos
